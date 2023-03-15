@@ -23,37 +23,15 @@ public class Calc {
         int multi = 1;
 
         if(needToSplit) {
-            int bracketCount = 0;
-            int splitPointIndex = -1;
+            int splitPointIndex = findSplintPointIndex(exp);
 
-            for (int i = 0; i < exp.length(); i++) {
-                if (exp.charAt(i) == '(') {
-                    bracketCount++;
-                } else if (exp.charAt(i) == ')') {
-                    bracketCount--;
-                }
 
-                if (bracketCount == 0) {
-                    splitPointIndex = i; //8
-                    break;
-                }
-            }
-
-            // 내가한 거
-            /*String firstExp = exp.substring(0, splitPointIndex+1);
-            String middle = exp.substring(splitPointIndex+1,splitPointIndex+4);
-            String secondExp = exp.substring(splitPointIndex+4);
-            // 이렇게 하면 ) 이후 부터 나오는 " + "가 아닌 뒤부터 들어간다.
-            if(middle.contains("+")) return Calc.run(firstExp) + Calc.run(secondExp);
-            else if(middle.contains("*")) return Calc.run(firstExp) * Calc.run(secondExp);*/
-
-            //강사님이 한거
-            String firstExp = exp.substring(0, splitPointIndex+1);
-            String secondExp = exp.substring(splitPointIndex+4);
-            char operationCode = exp.charAt(splitPointIndex+2);
-            // 이렇게 하면 ) 이후 부터 나오는 " + "가 아닌 뒤부터 들어간다.
+            String firstExp = exp.substring(0, splitPointIndex);
+            String secondExp = exp.substring(splitPointIndex+1);
+            char operationCode = exp.charAt(splitPointIndex);
             exp = Calc.run(firstExp) + " " + operationCode + " " + Calc.run(secondExp);
             return run(exp);
+
 
         }
 
@@ -94,6 +72,51 @@ public class Calc {
         }
 
         throw new RuntimeException("올바른 게산식 쓰셈");
+    }
+
+    private static int findSplintPointIndexBy(String exp, char findChar){
+        int bracketCount = 0;
+
+        for(int i =0; i<exp.length();i++)
+        {
+            char c = exp.charAt(i);
+
+            if(c == '('){
+                bracketCount++;
+            }
+            else if(c == ')'){
+                bracketCount--;
+            }
+            else if(c == findChar){
+                if(bracketCount == 0){
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static int findSplintPointIndex(String exp) {
+        int bracketCount = 0;
+
+        //강사님이 한거
+        int index = findSplintPointIndexBy(exp, '+');
+        if(index >= 0) return index;
+
+        return findSplintPointIndexBy(exp, '*');
+
+        //내가한거
+        /*int findPlus = findSplintPointIndexBy(exp, '+');
+        int findMulti = findSplintPointIndexBy(exp, '*');
+
+        if(findPlus != -1){
+            return findPlus;
+        }
+        else if(findMulti != -1){
+            return findMulti;
+        }
+
+        return -1;*/
     }
 
     private static String stripOuterBrackets(String exp){
