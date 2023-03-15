@@ -13,8 +13,9 @@ public class Calc {
         if(exp.contains(" ") == false) return Integer.parseInt(exp);
 
         boolean needToMulti = exp.contains(" * "); //특정 문자 하나를 포함하는지의 여부
-        boolean needToPlus = exp.contains(" + ") || exp.contains(" - ");
         boolean needToSplit = exp.contains("(") || exp.contains(")");
+        boolean needToPlus = exp.contains(" + ") || exp.contains(" - ");
+
 
         boolean needToCompound = needToMulti && needToPlus;
 
@@ -38,16 +39,21 @@ public class Calc {
                 }
             }
 
-
-
-            String firstExp = exp.substring(0, splitPointIndex+1);
-            //System.out.println(exp);
+            // 내가한 거
+            /*String firstExp = exp.substring(0, splitPointIndex+1);
             String middle = exp.substring(splitPointIndex+1,splitPointIndex+4);
-            //System.out.println(firstExp);
             String secondExp = exp.substring(splitPointIndex+4);
             // 이렇게 하면 ) 이후 부터 나오는 " + "가 아닌 뒤부터 들어간다.
             if(middle.contains("+")) return Calc.run(firstExp) + Calc.run(secondExp);
-            else if(middle.contains("*")) return Calc.run(firstExp) * Calc.run(secondExp);
+            else if(middle.contains("*")) return Calc.run(firstExp) * Calc.run(secondExp);*/
+
+            //강사님이 한거
+            String firstExp = exp.substring(0, splitPointIndex+1);
+            String secondExp = exp.substring(splitPointIndex+4);
+            char operationCode = exp.charAt(splitPointIndex+2);
+            // 이렇게 하면 ) 이후 부터 나오는 " + "가 아닌 뒤부터 들어간다.
+            exp = Calc.run(firstExp) + " " + operationCode + " " + Calc.run(secondExp);
+            return run(exp);
 
         }
 
